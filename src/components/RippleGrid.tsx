@@ -1,7 +1,24 @@
 "use client"
 import { useRef, useEffect } from 'react';
 import { Renderer, Program, Triangle, Mesh } from 'ogl';
+type Uniforms = {
+  iTime: { value: number };
+  iResolution: { value: number[] };
+  enableRainbow: { value: boolean };
+  gridColor: { value: [number, number, number] };
+  rippleIntensity: { value: number };
+  gridSize: { value: number };
+  opacity:{value:number};
+  gridThickness: { value: number };
+  fadeDistance: { value: number };
+  glowIntensity: { value: number };
+  gridRotation: { value: number };
+  vignetteStrength: { value: number };
+  mouseInteraction: { value: boolean };
+  mouseInteractionRadius: { value: number };
+};
 
+ 
 type Props = {
   enableRainbow?: boolean;
   gridColor?: string;
@@ -35,7 +52,7 @@ const RippleGrid: React.FC<Props> = ({
   const mousePositionRef = useRef({ x: 0.5, y: 0.5 });
   const targetMouseRef = useRef({ x: 0.5, y: 0.5 });
   const mouseInfluenceRef = useRef(0);
-  const uniformsRef = useRef<any>(null);
+  const uniformsRef = useRef<  Uniforms | null>(null);
 
   useEffect(() => {
     if (!containerRef.current) return;

@@ -1,3 +1,12 @@
-    import { Bitter } from 'next/font/google';
+    import { Bitter, Geist, Geist_Mono } from 'next/font/google';
  
 export const bitter = Bitter({ subsets: ['latin'] });
+export const geistSans = Geist({
+  variable: "--font-geist-sans",
+  subsets: ["latin"],
+});
+
+export const geistMono = Geist_Mono({
+  variable: "--font-geist-mono",
+  subsets: ["latin"],
+});

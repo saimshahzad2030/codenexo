@@ -1,15 +1,12 @@
 "use client"
-import React, { useRef } from 'react'
-import ScrollReveal from '../ScrollReveal'
+import React  from 'react' 
 import RotatingText from '../RotatingText'
 import { bitter } from '@/fonts/fonts'
 import SplitText from '../SplitText'  
-import FadeContent from '../FadeContent'
-import DarkVeil from '../DarkVeil'
+import FadeContent from '../FadeContent' 
 import RippleGrid from '../RippleGrid'
 
-const Landing = () => {
-    const containerRef = useRef(null);
+const Landing = () => { 
 
   return (
     <div className={`relative flex flex-col items-center justify-center w-full h-[90vh] ${bitter.className} px-8`}>
