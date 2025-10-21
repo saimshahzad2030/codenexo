@@ -42,7 +42,12 @@
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
 }
-
+html.lenis {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto;
+}
 :root {
   --radius: 0.625rem;
   --foreground: oklch(1 0 0);
