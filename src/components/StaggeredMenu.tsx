@@ -1,6 +1,7 @@
 "use client"
 import React, { useCallback, useLayoutEffect, useRef, useState } from 'react';
 import { gsap } from 'gsap';
+import Link from 'next/link';
 
 export interface StaggeredMenuItem {
   label: string;
@@ -347,8 +348,11 @@ export const StaggeredMenu: React.FC<StaggeredMenuProps> = ({
 
   return (
     <div
-      className={`sm-scope z-40 ${isFixed ? 'fixed top-0 left-0 w-screen h-screen overflow-hidden' : 'w-full h-full'}`}
-    >
+  className={`sm-scope z-40 ${
+    isFixed ? "fixed top-0 left-0 w-screen h-screen" : "w-full h-full"
+  } ${open ? "pointer-events-auto" : "pointer-events-none"}`}
+>
+
       <div
         className={(className ? className + ' ' : '') + 'staggered-menu-wrapper relative w-full h-full z-40'}
         style={accentColor ? ({ ['--sm-accent' as any]: accentColor } as React.CSSProperties) : undefined}
@@ -449,7 +453,7 @@ export const StaggeredMenu: React.FC<StaggeredMenuProps> = ({
               {items && items.length ? (
                 items.map((it, idx) => (
                   <li className="sm-panel-itemWrap relative overflow-hidden leading-none" key={it.label + idx}>
-                    <a
+                    <Link
                       className="sm-panel-item relative text-black font-semibold text-[4rem] cursor-pointer leading-none tracking-[-2px] uppercase transition-[background,color] duration-150 ease-linear inline-block no-underline pr-[1.4em]"
                       href={it.link}
                       aria-label={it.ariaLabel}
@@ -458,7 +462,7 @@ export const StaggeredMenu: React.FC<StaggeredMenuProps> = ({
                       <span className="sm-panel-itemLabel inline-block [transform-origin:50%_100%] will-change-transform">
                         {it.label} 
                       </span>
-                    </a>
+                    </Link>
                   </li>
                 ))
               ) : (
