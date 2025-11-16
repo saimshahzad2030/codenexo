@@ -18,8 +18,8 @@ const CreativeTeam = () => {
         </div>
         <div className='flex flex-col items-center w-full bg-black/40 rounded-md p-4'>
             <img src={'/new-team-01.png'}/>
-            <p className='mt-6 font-bold text-lg'>Lorem Ipsum</p>
-            <p className='text-sm font-light mt-2'>Lorem Ipsum Developer</p>
+            <p className='mt-6 font-bold text-lg'>Hamza Khan</p>
+            <p className='text-sm font-light mt-2'>Bitcoin Developer</p>
         </div>
       </div>
 

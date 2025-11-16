@@ -12,13 +12,13 @@ const Landing = () => {
       {/* Text Content */}
       <div className="relative z-10 max-w-3xl px-6">
         <h2 className="text-white font-extrabold text-4xl md:text-5xl">
-          About Our Office
+          Building AI-Powered Products and Automation for Modern Businesses
         </h2>
         <p className="text-gray-200 mt-4 text-sm md:text-base leading-relaxed">
-         We build scalable digital products and custom software solutions for startups
-and enterprises. From product strategy to design and development, our team
-delivers reliable, high-performance systems that empower businesses to grow.
-
+         We specialize in AI & automation, full-stack web and app development, custom software solutions, and seamless API integrations. From concept to deployment, we deliver production-ready systems that scale with your business.
+        </p>
+        <p className="text-gray-300 mt-3 text-sm md:text-base font-medium">
+          We help founders and teams turn complex ideas into reliable, scalable products.
         </p>
       </div>
     </section>
