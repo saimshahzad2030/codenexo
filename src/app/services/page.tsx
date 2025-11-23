@@ -5,6 +5,12 @@ import { bitter } from '@/fonts/fonts'
 import Link from 'next/link'
 import { SERVICES } from '@/constants/services'
 import { Button } from '@/components/ui/button'
+import type { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: 'Services - CodeNexo | AI, Web Development & Custom Software Solutions',
+  description: 'Explore CodeNexo\'s services: AI & Automation, Web & App Development, Custom Software, Embedded IoT Systems, Data Analytics, and API Integrations.',
+}
 
 const ServicesPage = () => {
   return (

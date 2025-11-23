@@ -1,10 +1,55 @@
-import React from 'react'
+'use client'
+import React, { useState, FormEvent } from 'react'
 import { FaComments, FaEnvelope, FaPhoneAlt } from 'react-icons/fa'
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 const ContactUsSection = () => {
+  const [firstName, setFirstName] = useState('')
+  const [lastName, setLastName] = useState('')
+  const [email, setEmail] = useState('')
+  const [phone, setPhone] = useState('')
+  const [query, setQuery] = useState('')
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [status, setStatus] = useState<'idle' | 'success' | 'error'>('idle')
+
+  const validate = () => {
+    if (!firstName.trim() || !email.trim() || !query.trim()) return false
+    return true
+  }
+
+  const handleSubmit = async (e: FormEvent) => {
+    e.preventDefault()
+    if (!validate()) return
+    setIsSubmitting(true)
+    setStatus('idle')
+    try {
+      const fd = new FormData()
+      fd.append('fullName', `${firstName} ${lastName}`.trim())
+      fd.append('email', email)
+      fd.append('companyName', '')
+      fd.append('contactNo', phone)
+      fd.append('whatsApp', phone)
+      fd.append('location', '')
+      fd.append('budget', '')
+      fd.append('message', query)
+      fd.append('leadSource', 'Landing page form /home')
+      const res = await fetch('/api/contact', { method: 'POST', body: fd })
+      if (res.ok) {
+        setStatus('success')
+        setFirstName(''); setLastName(''); setEmail(''); setPhone(''); setQuery('')
+      } else {
+        setStatus('error')
+      }
+    } catch (err) {
+      console.error('Landing form error:', err)
+      setStatus('error')
+    } finally {
+      setIsSubmitting(false)
+    }
+  }
+
   return (
     <div className='p-12 flex flex-row items-center justify-between'>
          <section className="w-5/12   text-white">
@@ -32,66 +77,74 @@ const ContactUsSection = () => {
         {/* Email */}
         <div className="flex items-center gap-2">
           <FaEnvelope className="text-xl" />
-          <a href="mailto:info@yourcompany.com" className="underline">
-            info@yourcompany.com
+          <a href="mailto:contact@codenexo.com" className="underline">
+            contact@codenexo.com
           </a>
         </div>
 
         {/* Phone */}
         <div className="flex items-center gap-2">
           <FaPhoneAlt className="text-xl" />
-          <a href="tel:+1234567890" className="underline">
-            +1 (234) 567-890
+          <a href="tel:+923001234567" className="underline">
+            +92 300 123 4567
           </a>
         </div>
 
         {/* Live Chat */}
         <div className="flex items-center gap-2">
           <FaComments className="text-xl" />
-          <a href="#" className="underline">
+          <a href="/contact" className="underline">
             chat with us
           </a>
         </div>
       </div>
     </section>
     <div className='w-5/12'>
-    <form className="max-w-2xl mx-auto w-full mt-10 space-y-6">
+    <form onSubmit={handleSubmit} className="max-w-2xl mx-auto w-full mt-10 space-y-6">
+      {status === 'success' && (
+        <div className="bg-green-500/10 border border-green-500/30 rounded-lg p-3 text-center text-sm">Thank you! We'll respond within 24 hours.</div>
+      )}
+      {status === 'error' && (
+        <div className="bg-red-500/10 border border-red-500/30 rounded-lg p-3 text-center text-sm">Failed to submit. Please retry.</div>
+      )}
       
       {/* First + Last Name (Row) */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div className="flex flex-col space-y-2">
+        <div className="flex flex-col space-y-2" suppressHydrationWarning>
           <Label className="text-sm font-medium">First Name</Label>
-          <Input placeholder="John" />
+          <Input placeholder="John" value={firstName} onChange={e=>setFirstName(e.target.value)} />
         </div>
 
-        <div className="flex flex-col space-y-2">
+        <div className="flex flex-col space-y-2" suppressHydrationWarning>
           <Label className="text-sm font-medium">Last Name</Label>
-          <Input placeholder="Doe" />
+          <Input placeholder="Doe" value={lastName} onChange={e=>setLastName(e.target.value)} />
         </div>
       </div>
 
       {/* Email */}
-      <div className="flex flex-col space-y-2">
+      <div className="flex flex-col space-y-2" suppressHydrationWarning>
         <Label className="text-sm font-medium">Email</Label>
-        <Input type="email" placeholder="john@example.com" />
+        <Input type="email" placeholder="john@example.com" value={email} onChange={e=>setEmail(e.target.value)} />
       </div>
- <div className="flex flex-col space-y-2">
+ <div className="flex flex-col space-y-2" suppressHydrationWarning>
     <Label>Phone / WhatsApp</Label>
-    <Input type="tel" placeholder="+1 234 567 890" />
+    <Input type="tel" placeholder="+1 234 567 890" value={phone} onChange={e=>setPhone(e.target.value)} />
   </div>
       {/* Query */}
-      <div className="flex flex-col space-y-2">
+      <div className="flex flex-col space-y-2" suppressHydrationWarning>
         <Label className="text-sm font-medium">Your Query</Label>
         <Textarea
           placeholder="Write your message here..."
           className="resize-none"
           rows={6}
+          value={query}
+          onChange={e=>setQuery(e.target.value)}
         />
       </div>
 
       {/* Submit Button */}
-      <Button type="submit" variant={"custom1"} className="w-full">
-        Submit
+      <Button type="submit" variant={"custom1"} className="w-full" disabled={isSubmitting}>
+        {isSubmitting ? 'Submitting...' : 'Submit'}
       </Button>
     </form>
     </div>

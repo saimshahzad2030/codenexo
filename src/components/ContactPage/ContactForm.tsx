@@ -72,7 +72,7 @@ const ContactForm = () => {
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault()
-    
+
     if (!validateForm()) {
       return
     }
@@ -81,17 +81,27 @@ const ContactForm = () => {
     setSubmitStatus('idle')
 
     try {
+      // Map to unified FormData expected by /api/contact
+      const fd = new FormData()
+      fd.append('fullName', formData.fullName)
+      fd.append('email', formData.email)
+      fd.append('companyName', formData.company)
+      fd.append('contactNo', '') // no phone field in this form
+      fd.append('whatsApp', '')
+      fd.append('location', '')
+      fd.append('budget', '')
+      // Merge project meta into message for CRM context
+      const combinedMessage = `${formData.message}\n---\nProject Type: ${formData.projectType}\nBudget Range: ${formData.budget}\nTimeline: ${formData.timeline}\nHeard From: ${formData.heardFrom || 'N/A'}`
+      fd.append('message', combinedMessage)
+      fd.append('leadSource', 'Project inquiry form /contact')
+
       const response = await fetch('/api/contact', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
+        body: fd,
       })
 
       if (response.ok) {
         setSubmitStatus('success')
-        // Reset form
         setFormData({
           fullName: '',
           email: '',
