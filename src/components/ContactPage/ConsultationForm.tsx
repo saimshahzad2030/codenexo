@@ -180,7 +180,7 @@ const ConsultationForm = () => {
               {submitStatus === 'error' && (
                 <div className="bg-red-500/10 border border-red-500/30 rounded-lg p-4 text-center">
                   <p className="text-red-400 font-semibold">✗ Something went wrong</p>
-                  <p className="text-sm text-gray-300 mt-1">Please try again or email us directly at contact@codenexo.com</p>
+                  <p className="text-sm text-gray-300 mt-1">Please try again or email us directly at muhammadmubashirbabar@gmail.com</p>
                 </div>
               )}
 

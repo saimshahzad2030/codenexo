@@ -136,7 +136,7 @@ const ContactUsSection = () => {
       </div>
  <div className="flex flex-col space-y-2" suppressHydrationWarning>
     <Label>Phone / WhatsApp</Label>
-    <Input type="tel" placeholder="+1 234 567 890" value={phone} onChange={e=>setPhone(e.target.value)} />
+    <Input type="tel" placeholder="+92 322 626 4566" value={phone} onChange={e=>setPhone(e.target.value)} />
   </div>
       {/* Query */}
       <div className="flex flex-col space-y-2" suppressHydrationWarning>
