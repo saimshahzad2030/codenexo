@@ -7,9 +7,28 @@ import { SERVICES } from '@/constants/services'
 import { Button } from '@/components/ui/button'
 import type { Metadata } from 'next'
 
-export const metadata: Metadata = {
-  title: 'Services - CodeNexo | AI, Web Development & Custom Software Solutions',
-  description: 'Explore CodeNexo\'s services: AI & Automation, Web & App Development, Custom Software, Embedded IoT Systems, Data Analytics, and API Integrations.',
+export function generateMetadata(): Metadata {
+  const title = 'Services | CodeNexo';
+  const description = 'Explore AI automation, web & app development, custom software, IoT systems, data & analytics, and workflow integrations.';
+  const url = 'https://codenexo.vercel.app/services';
+  return {
+    title,
+    description,
+    alternates: { canonical: url },
+    openGraph: {
+      title,
+      description,
+      url,
+      images: ['/og-image.png'],
+      type: 'website'
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title,
+      description,
+      images: ['/og-image.png']
+    }
+  };
 }
 
 const ServicesPage = () => {
@@ -31,7 +50,9 @@ const ServicesPage = () => {
               <article key={s.slug} className="group bg-white/5 hover:bg-white/7 border border-white/5 p-6 rounded-xl transition-shadow shadow-sm">
                 <div className="flex items-start justify-between">
                   <div>
-                    <h3 className="text-lg font-bold text-white">{s.title}</h3>
+                    <h3 className="text-lg font-bold text-white">
+                      <Link href={`/services/${s.slug}`} className="no-underline hover:underline">{s.title}</Link>
+                    </h3>
                     <p className="mt-2 text-sm text-gray-300">{s.short}</p>
                   </div>
                 </div>

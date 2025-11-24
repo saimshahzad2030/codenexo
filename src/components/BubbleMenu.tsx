@@ -3,6 +3,7 @@ import type { CSSProperties, ReactNode } from 'react';
 import { useEffect, useRef, useState } from 'react';
 import { gsap } from 'gsap';
 import { motion, AnimatePresence } from "framer-motion";
+import Image from 'next/image';
 
 type MenuItem = {
   label: string;
@@ -269,7 +270,7 @@ export default function BubbleMenu({
             }
           >
             {typeof logo === 'string' ? (
-              <img src={logo} alt="Logo" className="bubble-logo max-h-[60%] max-w-full object-contain block" />
+              <Image src={logo as string} alt="Logo" width={140} height={40} className="bubble-logo max-h-[60%] max-w-full object-contain block w-auto h-auto" priority />
             ) : (
               logo
             )}

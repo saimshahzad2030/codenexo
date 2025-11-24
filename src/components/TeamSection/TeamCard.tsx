@@ -1,5 +1,6 @@
 "use client";
 import React from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { FaFacebook, FaLinkedin, FaGithub, FaGlobe } from "react-icons/fa";
 export interface TeamMember {
@@ -34,9 +35,11 @@ const TeamCard = React.memo(({ data }: TeamCardProps) => {
         <p className="text-xs text-gray-400 mt-2">{data.description}</p>
 
         <div className="flex flex-row items-center w-full justify-center mt-4">
-          <img
+          <Image
             loading="lazy"
             src={data.image}
+            width={128}
+            height={128}
             className="w-32 h-32 rounded-full object-cover"
             alt={data.name}
           />

@@ -5,6 +5,7 @@ import { bitter } from '@/fonts/fonts'
 import Link from 'next/link'
 import { getServiceBySlug, SERVICES } from '@/constants/services'
 import { Button } from '@/components/ui/button'
+import type { Metadata } from 'next'
 
 type Props = {
   params: { slug: string }
@@ -12,6 +13,36 @@ type Props = {
 
 export async function generateStaticParams() {
   return SERVICES.map((s) => ({ slug: s.slug }))
+}
+
+export function generateMetadata({ params }: { params: { slug: string } }): Metadata {
+  const service = getServiceBySlug(params.slug)
+  if (!service) {
+    return {
+      title: 'Service Not Found | CodeNexo',
+      description: 'The requested service could not be found.',
+      alternates: { canonical: `https://codenexo.vercel.app/services/${params.slug}` },
+    }
+  }
+  const baseUrl = 'https://codenexo.vercel.app/services/' + service.slug
+  return {
+    title: `${service.title} | CodeNexo`,
+    description: service.short,
+    alternates: { canonical: baseUrl },
+    openGraph: {
+      title: `${service.title} | CodeNexo`,
+      description: service.short,
+      url: baseUrl,
+      type: 'article',
+      images: ['/og-image.png'],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: `${service.title} | CodeNexo`,
+      description: service.short,
+      images: ['/og-image.png'],
+    },
+  }
 }
 
 const ServicePage = ({ params }: Props) => {
@@ -73,6 +104,23 @@ const ServicePage = ({ params }: Props) => {
       </header>
 
       <main className="max-w-6xl mx-auto px-6 py-12">
+        {/* Service JSON-LD structured data */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              '@context': 'https://schema.org',
+              '@type': 'Service',
+              name: service.title,
+              description: service.short,
+              provider: {
+                '@type': 'Organization',
+                name: 'CodeNexo',
+                url: 'https://codenexo.vercel.app',
+              },
+            }),
+          }}
+        />
         <section className="grid lg:grid-cols-3 gap-8">
           <div className="lg:col-span-2">
             <h2 className="text-2xl font-bold">Problem & Solution</h2>

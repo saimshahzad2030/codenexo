@@ -1,5 +1,6 @@
 import { ArrowRight, ArrowRightIcon } from 'lucide-react'
 import React from 'react'
+import Image from 'next/image'
 
 const WhyUs = () => {
   return (
@@ -36,7 +37,7 @@ Production-Ready Systems</p>
         </div>
         </div>
        <div className="w-6/12 flex flex-col items-start p-8 bg-black/90 shadow-[0_0_90px_rgba(150,150,150,0.1)] rounded-lg">
-  <img src={'/why-us.jpg'} className="w-full" />
+  <Image src={'/why-us.jpg'} alt="Why choose CodeNexo" width={1200} height={800} className="w-full h-auto" loading="lazy" />
 </div>
 
 
