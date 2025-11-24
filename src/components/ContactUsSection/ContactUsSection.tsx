@@ -77,16 +77,24 @@ const ContactUsSection = () => {
         {/* Email */}
         <div className="flex items-center gap-2">
           <FaEnvelope className="text-xl" />
-          <a href="mailto:contact@codenexo.com" className="underline">
-            contact@codenexo.com
+          <a href="mailto:muhammadmubashirbabar@gmail.com" className="underline">
+            muhammadmubashirbabar@gmail.com
           </a>
         </div>
 
         {/* Phone */}
         <div className="flex items-center gap-2">
           <FaPhoneAlt className="text-xl" />
-          <a href="tel:+923001234567" className="underline">
-            +92 300 123 4567
+          <a href="tel:+923226264566" className="underline">
+            +92 322 626 4566
+          </a>
+        </div>
+
+        {/* Whatsapp */}
+        <div className="flex items-center gap-2">
+          <FaPhoneAlt className="text-xl" />
+          <a href="https://wa.me/923226264566" className="underline">
+            WhatsApp us
           </a>
         </div>
 
