@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { Resend } from 'resend'
 
 export async function POST(request: NextRequest) {
   try {
@@ -100,47 +99,83 @@ Submitted: ${timestamp}`
       }
     }
 
-    // Send email notification via Resend
-    const resendApiKey = process.env.RESEND_API_KEY
-    const notifyTo = process.env.NOTIFY_TO_EMAIL
-    const notifyFrom = process.env.NOTIFY_FROM_EMAIL
+    // Send email notification via Brevo
+    const brevoApiKey = process.env.BREVO_API_KEY
+    const brevoSenderEmail = process.env.BREVO_SENDER_EMAIL
+    const brevoSenderName = process.env.BREVO_SENDER_NAME || 'CodeNexo'
+    const brevoNotificationTo = process.env.BREVO_NOTIFICATION_TO
 
-    if (resendApiKey && notifyTo && notifyFrom) {
+    if (!brevoApiKey) {
+      console.error('Missing BREVO_API_KEY - skipping email notification')
+    } else if (!brevoSenderEmail || !brevoNotificationTo) {
+      console.error('Missing BREVO_SENDER_EMAIL or BREVO_NOTIFICATION_TO - skipping email notification')
+    } else {
       try {
-        const resend = new Resend(resendApiKey)
+        const subject = `New website lead - ${leadSource}`
 
-        const emailHtml = `
-          <h2>New Website Lead</h2>
-          <p><strong>Lead Source:</strong> ${leadSource}</p>
-          <hr />
-          <p><strong>Full Name:</strong> ${fullName}</p>
-          <p><strong>Email:</strong> <a href="mailto:${email}">${email}</a></p>
-          <p><strong>Company Name:</strong> ${companyName || 'N/A'}</p>
-          <p><strong>Contact No:</strong> ${contactNo || 'N/A'}</p>
-          <p><strong>WhatsApp:</strong> ${whatsApp || 'N/A'}</p>
-          <p><strong>Location:</strong> ${location || 'N/A'}</p>
-          <p><strong>Budget:</strong> ${budget || 'N/A'}</p>
-          <hr />
+        const textContent = `
+New website lead from ${leadSource}:
+
+Full Name: ${fullName}
+Email: ${email}
+Company Name: ${companyName || 'N/A'}
+Contact No: ${contactNo || 'N/A'}
+WhatsApp: ${whatsApp || 'N/A'}
+Location: ${location || 'N/A'}
+Budget: ${budget || 'N/A'}
+Message:
+${message || 'N/A'}
+
+File: ${file ? `${file.name} (${file.size} bytes)` : 'No file uploaded'}
+Timestamp: ${timestamp}
+        `.trim()
+
+        const htmlContent = `
+          <h2>New website lead - ${leadSource}</h2>
+          <ul>
+            <li><strong>Full Name:</strong> ${fullName}</li>
+            <li><strong>Email:</strong> <a href="mailto:${email}">${email}</a></li>
+            <li><strong>Company Name:</strong> ${companyName || 'N/A'}</li>
+            <li><strong>Contact No:</strong> ${contactNo || 'N/A'}</li>
+            <li><strong>WhatsApp:</strong> ${whatsApp || 'N/A'}</li>
+            <li><strong>Location:</strong> ${location || 'N/A'}</li>
+            <li><strong>Budget:</strong> ${budget || 'N/A'}</li>
+          </ul>
           <p><strong>Message:</strong></p>
-          <p>${message.replace(/\n/g, '<br>')}</p>
-          <hr />
+          <p>${(message || 'N/A').replace(/\n/g, '<br />')}</p>
+          <p><strong>File:</strong> ${file ? `${file.name} (${file.size} bytes)` : 'No file uploaded'}</p>
           <p><strong>Timestamp:</strong> ${timestamp}</p>
-          ${file ? `<p><strong>File Uploaded:</strong> ${file.name} (${file.size} bytes)</p>` : ''}
         `
 
-        await resend.emails.send({
-          from: notifyFrom,
-          to: notifyTo,
-          subject: `New website lead – ${leadSource}`,
-          html: emailHtml,
+        const brevoBody = {
+          sender: { email: brevoSenderEmail, name: brevoSenderName },
+          to: [{ email: brevoNotificationTo, name: 'CodeNexo Sales' }],
+          subject,
+          textContent,
+          htmlContent,
+        }
+
+        const brevoRes = await fetch('https://api.brevo.com/v3/smtp/email', {
+          method: 'POST',
+          headers: {
+            'accept': 'application/json',
+            'content-type': 'application/json',
+            'api-key': brevoApiKey,
+          },
+          body: JSON.stringify(brevoBody),
         })
 
-        console.log('✓ Email notification sent successfully')
+        if (!brevoRes.ok) {
+          const errText = await brevoRes.text()
+          console.error('Brevo email error:', errText)
+          console.error('Brevo API Key (first 10 chars):', brevoApiKey.substring(0, 10))
+        } else {
+          const result = await brevoRes.json()
+          console.log('✓ Brevo notification email sent:', result)
+        }
       } catch (err) {
-        console.error('Email notification error:', err)
+        console.error('Brevo email request failed:', err)
       }
-    } else {
-      console.warn('Resend email notification skipped: missing env vars')
     }
 
     // Keep existing success response shape
